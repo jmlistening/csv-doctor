@@ -1,0 +1,34 @@
+name: Python tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PIP_NO_CACHE_DIR: "1"
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install project dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --no-cache-dir --disable-pip-version-check -r requirements.txt
+      - name: Run unit and Streamlit app tests
+        run: |
+          mkdir -p .runtime/tmp
+          TMPDIR="$GITHUB_WORKSPACE/.runtime/tmp" .venv/bin/python -m pytest -q --basetemp="$GITHUB_WORKSPACE/.pytest_tmp/ci"

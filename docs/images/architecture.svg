@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="760" viewBox="0 0 1040 760" role="img" aria-labelledby="title desc">
+<title id="title">CSV Doctor 系统架构</title>
+<desc id="desc">CSV 和 Excel 文件上传后，经 Streamlit 交互层、文件解析模块成为内存 DataFrame，再分流至质量分析与非破坏式清洗，分别输出数据质量报告与清洗 CSV。</desc>
+<defs>
+  <linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0C1425"/><stop offset="1" stop-color="#15243D"/></linearGradient>
+  <linearGradient id="main" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#183A4B"/><stop offset="1" stop-color="#162E47"/></linearGradient>
+  <linearGradient id="result" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#17463C"/><stop offset="1" stop-color="#134039"/></linearGradient>
+  <filter id="shadow" x="-25%" y="-35%" width="150%" height="180%"><feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#000" flood-opacity=".22"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L9,5 L1,9" fill="none" stroke="#58D7B9" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <style>
+    .zh {font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', Arial, sans-serif;}
+    .label {font-size:21px;fill:#F7FAFF;font-weight:650;}
+    .detail {font-size:14px;fill:#AABBD0;}
+    .overline {font-size:13px;fill:#63DEC4;font-weight:700;letter-spacing:2px;}
+    .name {font-size:15px;fill:#91AFC1;font-weight:600;}
+    .guide {fill:none;stroke:#58D7B9;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow);}
+    .node {fill:url(#main);stroke:#347184;stroke-width:1.5;}
+    .focus {fill:#102C3F;stroke:#52E5BE;stroke-width:1.8;}
+    .end {fill:url(#result);stroke:#53D7B7;stroke-width:1.6;}
+  </style>
+</defs>
+<rect x="1" y="1" width="1038" height="758" rx="22" fill="url(#background)" stroke="#31435B" stroke-width="2"/>
+<text class="zh overline" x="46" y="51">CSV DOCTOR</text>
+<text class="zh" x="993" y="51" text-anchor="end" font-size="14" fill="#91A7BB">DATA FLOW / v1.0</text>
+<path d="M46 70 H994" stroke="#283E56"/>
+
+<!-- stage connectors kept behind nodes -->
+<path class="guide" d="M520 149 V172"/>
+<path class="guide" d="M520 250 V273"/>
+<path class="guide" d="M520 351 V378"/>
+<path class="guide" d="M520 467 V488 H268 V511"/>
+<path class="guide" d="M520 467 V488 H772 V511"/>
+<path class="guide" d="M268 589 V624"/>
+<path class="guide" d="M772 589 V624"/>
+
+<!-- upload -->
+<g ><rect class="focus" x="365" y="83" width="310" height="66" rx="15"/></g>
+<text class="zh label" x="520" y="122" text-anchor="middle">CSV / XLSX 文件上传</text>
+
+<!-- UI -->
+<g ><rect class="node" x="337" y="174" width="366" height="76" rx="15"/></g>
+<text class="zh label" x="520" y="207" text-anchor="middle">交互与状态管理</text>
+<text class="zh detail" x="520" y="231" text-anchor="middle">app.py · Streamlit Dashboard</text>
+
+<!-- Parse -->
+<g ><rect class="node" x="337" y="275" width="366" height="76" rx="15"/></g>
+<text class="zh label" x="520" y="307" text-anchor="middle">文件解析与输入校验</text>
+<text class="zh detail" x="520" y="332" text-anchor="middle">loader.py · 编码 / 表头 / 工作表</text>
+
+<!-- DataFrame cylinder -->
+<g ><rect x="354" y="391" width="332" height="71" fill="#16364D" stroke="#82ACCA" stroke-width="1.6"/><ellipse cx="520" cy="391" rx="166" ry="15" fill="#25506D" stroke="#82ACCA" stroke-width="1.6"/><path d="M354 462 A166 15 0 0 0 686 462" fill="none" stroke="#82ACCA" stroke-width="1.6"/></g>
+<text class="zh label" x="520" y="423" text-anchor="middle">内存数据</text>
+<text class="zh detail" x="520" y="446" text-anchor="middle">Pandas DataFrame</text>
+
+
+<!-- modules -->
+<g ><rect class="node" x="93" y="513" width="350" height="76" rx="15"/><rect class="node" x="597" y="513" width="350" height="76" rx="15"/></g>
+<text class="zh label" x="268" y="548" text-anchor="middle">数据质量分析</text>
+<text class="zh detail" x="268" y="574" text-anchor="middle">analyzer.py · 缺失 / 重复 / IQR / 评分</text>
+<text class="zh label" x="772" y="548" text-anchor="middle">非破坏式数据清洗</text>
+<text class="zh detail" x="772" y="574" text-anchor="middle">cleaner.py · 预览 / 去空白 / 去重</text>
+
+<!-- outputs -->
+<g ><rect class="end" x="93" y="628" width="350" height="75" rx="15"/><rect class="end" x="597" y="628" width="350" height="75" rx="15"/></g>
+<text class="zh label" x="268" y="658" text-anchor="middle">质量指标 · 可解释评分</text>
+<text class="zh detail" x="268" y="683" text-anchor="middle">JSON 体检报告</text>
+<text class="zh label" x="772" y="658" text-anchor="middle">清洗结果预览</text>
+<text class="zh detail" x="772" y="683" text-anchor="middle">UTF-8-SIG CSV 下载</text>
+<text class="zh" x="520" y="736" text-anchor="middle" font-size="12" fill="#738CA5">输入校验 → 内存处理 → 独立模块 → 可控导出</text>
+</svg>
